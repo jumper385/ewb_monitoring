@@ -15,14 +15,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Welcome to Flutter',
       home: Scaffold(
-          appBar: AppBar(
-            title: Text('Welcome to Flutter'),
-          ),
-          body: Column(
-            children: [
-              AsyncTest(),
-            ],
-          )),
+        appBar: AppBar(
+          title: Text('Welcome to Flutter'),
+        ),
+        body: Column(
+          children: [
+            AsyncTest(),
+          ],
+        ),
+      ),
     );
   }
 }
