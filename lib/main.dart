@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-// import 'package:location/location.dart';
 import 'package:sensors/sensors.dart';
 import 'package:geolocator/geolocator.dart';
-import 'dart:math';
-import 'package:http/http.dart';
 import 'dart:async';
 
 void main() => runApp(MyApp());
@@ -13,14 +10,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Welcome to Flutter',
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(
-          title: Text('Welcome to Flutter'),
-        ),
         body: Column(
           children: [
             AsyncTest(),
+            GPSData(),
           ],
         ),
       ),
@@ -39,8 +34,7 @@ class _AsyncTestState extends State<AsyncTest> {
   double _x, _y, _z = 0;
 
   void getData() async {
-    Timer(Duration(milliseconds: 250), () => print('hello world'));
-    Timer.periodic(Duration(seconds: 3), (timer) {
+    Timer.periodic(Duration(milliseconds: 100), (timer) {
       setState(() {
         _x = x;
         _y = y;
@@ -67,11 +61,43 @@ class _AsyncTestState extends State<AsyncTest> {
     return Container(
       child: Column(
         children: [
-          Text("x: " + _x.toStringAsFixed(3)),
-          Text("y: " + _y.toStringAsFixed(3)),
-          Text("z: " + _z.toStringAsFixed(3)),
+          Text(_x != null ? "x: " + _x.toStringAsFixed(3) : 'nothing...'),
+          Text(_y != null ? "y: " + _y.toStringAsFixed(3) : 'nothing...'),
+          Text(_z != null ? "z: " + _z.toStringAsFixed(3) : 'nothing...'),
         ],
       ),
     );
+  }
+}
+
+class GPSData extends StatefulWidget {
+  @override
+  GPSDataState createState() => GPSDataState();
+}
+
+class GPSDataState extends State<GPSData> {
+  Position currPos;
+
+  @override
+  void initState() {
+    super.initState();
+    getPositionStream().listen((Position pos) {
+      setState(() {
+        currPos = pos;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: Column(
+      children: [
+        Text("latitude: " +
+            (currPos != null ? currPos.latitude.toString() : 'nothing...')),
+        Text("longitude: " +
+            (currPos != null ? currPos.longitude.toString() : 'nothing...')),
+      ],
+    ));
   }
 }
