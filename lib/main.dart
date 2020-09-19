@@ -63,28 +63,43 @@ class _AsyncTestState extends State<AsyncTest> {
         padding: const EdgeInsets.all(32),
         child: Column(
           children: [
-            Text(
-              "Accelerometer Data",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: Text(
+                "Accelerometer Data",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
+              ),
             ),
-            Row(
+            Column(
               children: [
-                Center(
-                  child: Text(
-                    _x != null ? "x: " + _x.toStringAsFixed(3) : 'nothing...',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("X-Axis"),
+                      Text(_x.toStringAsFixed(3)),
+                    ],
                   ),
                 ),
-                Center(
-                  child: Text(
-                    _y != null ? "y: " + _y.toStringAsFixed(3) : 'nothing...',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Y-Axis"),
+                      Text(_y.toStringAsFixed(3)),
+                    ],
                   ),
                 ),
-                Center(
-                  child: Text(
-                    _z != null ? "z: " + _z.toStringAsFixed(3) : 'nothing...',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Z-Axis"),
+                      Text(_z.toStringAsFixed(3)),
+                    ],
                   ),
                 ),
               ],
