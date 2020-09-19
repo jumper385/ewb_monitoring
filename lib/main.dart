@@ -34,7 +34,7 @@ class _AsyncTestState extends State<AsyncTest> {
   double _x, _y, _z = 0;
 
   void getData() async {
-    Timer.periodic(Duration(milliseconds: 100), (timer) {
+    Timer.periodic(Duration(seconds: 3), (timer) {
       setState(() {
         _x = x;
         _y = y;
@@ -77,13 +77,21 @@ class GPSData extends StatefulWidget {
 
 class GPSDataState extends State<GPSData> {
   Position currPos;
+  Position posStream;
+
+  void delayed() {
+    Timer.periodic(Duration(seconds: 3), (timer) {
+      currPos = posStream;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
+    delayed();
     getPositionStream().listen((Position pos) {
       setState(() {
-        currPos = pos;
+        posStream = pos;
       });
     });
   }
@@ -91,13 +99,14 @@ class GPSDataState extends State<GPSData> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        child: Column(
-      children: [
-        Text("latitude: " +
-            (currPos != null ? currPos.latitude.toString() : 'nothing...')),
-        Text("longitude: " +
-            (currPos != null ? currPos.longitude.toString() : 'nothing...')),
-      ],
-    ));
+      child: Column(
+        children: [
+          Text("latitude: " +
+              (currPos != null ? currPos.latitude.toString() : 'nothing...')),
+          Text("longitude: " +
+              (currPos != null ? currPos.longitude.toString() : 'nothing...')),
+        ],
+      ),
+    );
   }
 }
