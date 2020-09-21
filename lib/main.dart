@@ -5,6 +5,8 @@ import 'package:location/location.dart';
 import 'dart:async';
 import 'dart:math';
 
+final delay = Duration(seconds: 3);
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -32,11 +34,11 @@ class AsyncTest extends StatefulWidget {
 
 class _AsyncTestState extends State<AsyncTest> {
   String message = "nothing...";
-  double x, y, z;
+  double x, y, z = 0;
   double _x, _y, _z = 0;
 
   void getData() async {
-    Timer.periodic(Duration(milliseconds: 100), (timer) {
+    Timer.periodic(delay, (timer) {
       setState(() {
         _x = x;
         _y = y;
@@ -80,7 +82,7 @@ class _AsyncTestState extends State<AsyncTest> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("X-Axis"),
-                      Text(_x.toStringAsFixed(3)),
+                      Text(_x != null ? _x.toStringAsFixed(3) : 'nothing...'),
                     ],
                   ),
                 ),
@@ -90,7 +92,7 @@ class _AsyncTestState extends State<AsyncTest> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("Y-Axis"),
-                      Text(_y.toStringAsFixed(3)),
+                      Text(_y != null ? _y.toStringAsFixed(3) : 'nothing...'),
                     ],
                   ),
                 ),
@@ -100,22 +102,21 @@ class _AsyncTestState extends State<AsyncTest> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("Z-Axis"),
-                      Text(_z.toStringAsFixed(3)),
+                      Text(_z != null ? _z.toStringAsFixed(3) : 'nothing...'),
                     ],
                   ),
                 ),
-
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 32, vertical: 0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("Net Acceleration"),
-                      Text( pow((pow(_x,2) + pow(_y,2) + pow(_z,2)),0.5).toStringAsFixed(3)),
+                      Text(_x != null ? pow((pow(_x, 2) + pow(_y, 2) + pow(_z, 2)), 0.5)
+                          .toStringAsFixed(3) : 'nothing...'),
                     ],
                   ),
                 ),
-
               ],
             )
           ],
@@ -136,11 +137,11 @@ class GPSDataState extends State<GPSData> {
   Location location = new Location();
 
   void delayed() {
-    Timer.periodic(Duration(milliseconds: 100), (timer) async {
-      final LocationData newLoc = await location.getLocation();
-      print("hello world");
-      setState((){
-        currPos = newLoc;
+    Timer.periodic(delay, (timer) {
+      location.getLocation().then((pos) {
+        setState(() {
+          currPos = pos;
+        });
       });
     });
   }
@@ -160,8 +161,12 @@ class GPSDataState extends State<GPSData> {
             "GPS Data",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
           ),
-          Text(currPos != null ? "latitude: " + currPos.latitude.toString() : 'nothing...'),
-          Text(currPos != null ? "longitude: " + currPos.longitude.toString() : 'nothing...'),
+          Text(currPos != null
+              ? "latitude: " + currPos.latitude.toString()
+              : 'nothing...'),
+          Text(currPos != null
+              ? "longitude: " + currPos.longitude.toString()
+              : 'nothing...'),
         ],
       ),
     );
