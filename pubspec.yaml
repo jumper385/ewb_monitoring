@@ -23,7 +23,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  geolocator: ^6.0.0
   sensors: ^0.4.2+4
   http: ^0.12.2
   location: ^3.0.0
