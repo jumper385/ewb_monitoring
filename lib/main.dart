@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:sensors/sensors.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:location/location.dart';
 import 'dart:async';
+import 'dart:math';
 
 void main() => runApp(MyApp());
 
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: Colors.purple[300],
+        backgroundColor: Colors.amber[50],
         body: Column(
           children: [
             AsyncTest(),
@@ -111,6 +112,10 @@ class _AsyncTestState extends State<AsyncTest> {
                     children: [
                       Text("Net Acceleration"),
                       Text( pow((pow(_x,2) + pow(_y,2) + pow(_z,2)),0.5).toStringAsFixed(3)),
+                    ],
+                  ),
+                ),
+
               ],
             )
           ],
@@ -126,12 +131,17 @@ class GPSData extends StatefulWidget {
 }
 
 class GPSDataState extends State<GPSData> {
-  Position currPos;
-  Position posStream;
+  LocationData currPos;
+  // Position posStream;
+  Location location = new Location();
 
   void delayed() {
-    Timer.periodic(Duration(milliseconds: 100), (timer) {
-      currPos = posStream;
+    Timer.periodic(Duration(milliseconds: 100), (timer) async {
+      final LocationData newLoc = await location.getLocation();
+      print("hello world");
+      setState((){
+        currPos = newLoc;
+      });
     });
   }
 
@@ -139,11 +149,6 @@ class GPSDataState extends State<GPSData> {
   void initState() {
     super.initState();
     delayed();
-    getPositionStream().listen((Position pos) {
-      setState(() {
-        posStream = pos;
-      });
-    });
   }
 
   @override
@@ -155,10 +160,8 @@ class GPSDataState extends State<GPSData> {
             "GPS Data",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
           ),
-          Text("latitude: " +
-              (currPos != null ? posStream.latitude.toString() : 'nothing...')),
-          Text("longitude: " +
-              (currPos != null ? posStream.longitude.toString() : 'nothing...')),
+          Text(currPos != null ? "latitude: " + currPos.latitude.toString() : 'nothing...'),
+          Text(currPos != null ? "longitude: " + currPos.longitude.toString() : 'nothing...'),
         ],
       ),
     );
