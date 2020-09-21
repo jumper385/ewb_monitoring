@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: Colors.amber[300],
+        backgroundColor: Colors.purple[300],
         body: Column(
           children: [
             AsyncTest(),
@@ -148,9 +148,9 @@ class GPSDataState extends State<GPSData> {
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
           ),
           Text("latitude: " +
-              (currPos != null ? currPos.latitude.toString() : 'nothing...')),
+              (currPos != null ? posStream.latitude.toString() : 'nothing...')),
           Text("longitude: " +
-              (currPos != null ? currPos.longitude.toString() : 'nothing...')),
+              (currPos != null ? posStream.longitude.toString() : 'nothing...')),
         ],
       ),
     );
