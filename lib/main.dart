@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: Colors.amber[50],
+        backgroundColor: Colors.purple[300],
         body: Column(
           children: [
             AsyncTest(),
