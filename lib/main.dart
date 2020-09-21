@@ -103,6 +103,14 @@ class _AsyncTestState extends State<AsyncTest> {
                     ],
                   ),
                 ),
+
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Net Acceleration"),
+                      Text( pow((pow(_x,2) + pow(_y,2) + pow(_z,2)),0.5).toStringAsFixed(3)),
               ],
             )
           ],
