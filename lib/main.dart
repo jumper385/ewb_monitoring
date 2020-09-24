@@ -37,6 +37,10 @@ class _AsyncTestState extends State<AsyncTest> {
   double x, y, z = 0;
   double _x, _y, _z = 0;
 
+  double euclideanDistance(double x_val, double y_val, double z_val) {
+    return pow((pow(x_val, 2) + pow(y_val, 2) + pow(z_val, 2)), 0.5);
+  }
+
   void getData() async {
     Timer.periodic(delay, (timer) {
       setState(() {
@@ -113,8 +117,7 @@ class _AsyncTestState extends State<AsyncTest> {
                     children: [
                       Text("Net Acceleration"),
                       Text(_x != null
-                          ? pow((pow(_x, 2) + pow(_y, 2) + pow(_z, 2)), 0.5)
-                              .toStringAsFixed(3)
+                          ? euclideanDistance(_x, _y, _z).toStringAsFixed(3)
                           : 'nothing...'),
                     ],
                   ),
