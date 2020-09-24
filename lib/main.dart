@@ -112,8 +112,10 @@ class _AsyncTestState extends State<AsyncTest> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("Net Acceleration"),
-                      Text(_x != null ? pow((pow(_x, 2) + pow(_y, 2) + pow(_z, 2)), 0.5)
-                          .toStringAsFixed(3) : 'nothing...'),
+                      Text(_x != null
+                          ? pow((pow(_x, 2) + pow(_y, 2) + pow(_z, 2)), 0.5)
+                              .toStringAsFixed(3)
+                          : 'nothing...'),
                     ],
                   ),
                 ),
@@ -161,21 +163,12 @@ class GPSDataState extends State<GPSData> {
             "GPS Data",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
           ),
-<<<<<<< HEAD
-          Text("latitude: " +
-              (currPos != null ? posStream.latitude.toString() : 'nothing...')),
-          Text("longitude: " +
-              (currPos != null
-                  ? posStream.longitude.toString()
-                  : 'nothing...')),
-=======
           Text(currPos != null
               ? "latitude: " + currPos.latitude.toString()
               : 'nothing...'),
           Text(currPos != null
               ? "longitude: " + currPos.longitude.toString()
               : 'nothing...'),
->>>>>>> upstream/master
         ],
       ),
     );
