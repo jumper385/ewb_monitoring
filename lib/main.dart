@@ -150,7 +150,9 @@ class GPSDataState extends State<GPSData> {
           Text("latitude: " +
               (currPos != null ? posStream.latitude.toString() : 'nothing...')),
           Text("longitude: " +
-              (currPos != null ? posStream.longitude.toString() : 'nothing...')),
+              (currPos != null
+                  ? posStream.longitude.toString()
+                  : 'nothing...')),
         ],
       ),
     );
