@@ -31,6 +31,18 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class MainStructure extends StatefulWidget {
+  @override
+  _MainStructureState createState() => _MainStructureState();
+}
+
+class _MainStructureState extends State<MainStructure> {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+/*
 class AsyncTest extends StatefulWidget {
   @override
   _AsyncTestState createState() => _AsyncTestState();
@@ -181,3 +193,4 @@ class GPSDataState extends State<GPSData> {
     );
   }
 }
+*/
