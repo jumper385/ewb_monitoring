@@ -35,10 +35,16 @@ class MainStructure extends StatefulWidget {
 
 class _MainStructureState extends State<MainStructure> {
   @override
+  void initstate() {
+    super.initState();
+    Timer thread1 = Timer.periodic(Duration(thread1_time))
+  }
+
   Widget build(BuildContext context) {
     return Container();
   }
 }
+
 /*
 class AsyncTest extends StatefulWidget {
   @override
