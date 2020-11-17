@@ -21,10 +21,7 @@ class MyApp extends StatelessWidget {
           title: Text('EWB APPtech'),
         ),
         body: Column(
-          children: [
-            AsyncTest(),
-            GPSData(),
-          ],
+          children: [MainStructure()],
         ),
       ),
     );
