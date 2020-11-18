@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:sensors/sensors.dart';
@@ -109,7 +107,7 @@ class _MainStructureState extends State<MainStructure> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("X-Axis"),
-                      Text(accelValues[0] != null
+                      Text(accelValues != null
                           ? accelValues[0].toStringAsFixed(3)
                           : 'nothing...'),
                     ],
@@ -121,7 +119,7 @@ class _MainStructureState extends State<MainStructure> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("Y-Axis"),
-                      Text(accelValues[1] != null
+                      Text(accelValues != null
                           ? accelValues[1].toStringAsFixed(3)
                           : 'nothing...'),
                     ],
@@ -133,7 +131,7 @@ class _MainStructureState extends State<MainStructure> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("Z-Axis"),
-                      Text(accelValues[2] != null
+                      Text(accelValues != null
                           ? accelValues[2].toStringAsFixed(3)
                           : 'nothing...'),
                     ],
