@@ -4,6 +4,7 @@ import 'package:sensors/sensors.dart';
 import 'package:location/location.dart';
 import 'dart:async';
 import 'dart:math';
+import 'filenaming.dart' as fn;
 
 final delay = Duration(seconds: 3);
 
@@ -33,7 +34,7 @@ class _AsyncTestState extends State<AsyncTest> {
   String message = "nothing...";
   double x, y, z = 0;
   double _x, _y, _z = 0;
-
+  String testTitle = fn.generateFilename(); // delete later - here for testing
   double euclideanDistance(double x_val, double y_val, double z_val) {
     return pow((pow(x_val, 2) + pow(y_val, 2) + pow(z_val, 2)), 0.5);
   }
@@ -71,7 +72,7 @@ class _AsyncTestState extends State<AsyncTest> {
             Padding(
               padding: const EdgeInsets.only(bottom: 16),
               child: Text(
-                "Accelerometer Data",
+                "Accelerometer Data ${testTitle}",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
               ),
             ),
