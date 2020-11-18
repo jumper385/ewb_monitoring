@@ -4,6 +4,7 @@ import 'package:sensors/sensors.dart';
 import 'package:location/location.dart';
 import 'dart:async';
 import 'dart:math';
+import 'filenaming.dart' as fn;
 
 final delay = Duration(milliseconds: 250);
 
@@ -21,10 +22,7 @@ class MyApp extends StatelessWidget {
           title: Text('EWB APPtech'),
         ),
         body: Column(
-          children: [
-            AsyncTest(),
-            GPSData(),
-          ],
+          children: [AsyncTest(), GPSData()],
         ),
       ),
     );
@@ -40,7 +38,7 @@ class _AsyncTestState extends State<AsyncTest> {
   String message = "nothing...";
   double x, y, z = 0;
   double _x, _y, _z = 0;
-
+  String testTitle = fn.generateFilename(); // delete later - here for testing
   double euclideanDistance(double x_val, double y_val, double z_val) {
     return pow((pow(x_val, 2) + pow(y_val, 2) + pow(z_val, 2)), 0.5);
   }
@@ -78,7 +76,7 @@ class _AsyncTestState extends State<AsyncTest> {
             Align(
               alignment: Alignment.center,
               child: Text(
-                "Accel Data",
+                "Accelerometer Data ${testTitle}",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
               ),
             ),
@@ -141,15 +139,20 @@ class GPSData extends StatefulWidget {
 }
 
 class GPSDataState extends State<GPSData> {
-  LocationData currPos;
-  // Position posStream;
   Location location = new Location();
+  var latlong;
+
+  Future<List> getGPS(gpsObject) async {
+    var newLocation = await gpsObject.getLocation();
+    return [newLocation.latitude, newLocation.longitude];
+  }
 
   void delayed() {
     Timer.periodic(delay, (timer) {
-      location.getLocation().then((pos) {
+      getGPS(location).then((value) {
+        print(value);
         setState(() {
-          currPos = pos;
+          latlong = value;
         });
       });
     });
@@ -170,11 +173,11 @@ class GPSDataState extends State<GPSData> {
             "GPS Data",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
           ),
-          Text(currPos != null
-              ? "latitude: " + currPos.latitude.toString()
+          Text(latlong != null
+              ? "latitude: " + latlong[0].toString()
               : 'nothing...'),
-          Text(currPos != null
-              ? "longitude: " + currPos.longitude.toString()
+          Text(latlong != null
+              ? "longitude: " + latlong[1].toString()
               : 'nothing...'),
         ],
       ),
