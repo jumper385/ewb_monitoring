@@ -1,5 +1,9 @@
+library filenaming;
+
 import 'package:uuid/uuid.dart';
 
-String generate_filename() {
+final uuid = Uuid();
+
+String generateFilename() {
   return uuid.v4();
 }
