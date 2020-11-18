@@ -4,7 +4,6 @@ import 'package:sensors/sensors.dart';
 import 'package:location/location.dart';
 import 'dart:async';
 import 'dart:math';
-import 'package:data_connection_checker/data_connection_checker.dart';
 
 final delay = Duration(milliseconds: 250);
 
@@ -178,79 +177,6 @@ class GPSDataState extends State<GPSData> {
               ? "longitude: " + currPos.longitude.toString()
               : 'nothing...'),
         ],
-      ),
-    );
-  }
-}
-
-class checkInternet {
-  StreamSubscription<DataConnectionStatus> listener;
-  var InternetStatus = "Unknown";
-  var contentmessage = "Unknown";
-
-  void _showDialog(String title, String content, BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-              title: new Text(title),
-              content: new Text(content),
-              actions: <Widget>[
-                new FlatButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: new Text("Close"))
-              ]
-          );
-        }
-    );
-  }
-
-  checkConnection(BuildContext context) async {
-    listener = DataConnectionChecker().onStatusChange.listen((status) {
-      switch (status) {
-        case DataConnectionStatus.connected:
-          InternetStatus = "Connected to the Internet";
-          contentmessage = "Connected to the Internet";
-          _showDialog(InternetStatus, contentmessage, context);
-          break;
-        case DataConnectionStatus.disconnected:
-          InternetStatus = "You are disconnected to the Internet. ";
-          contentmessage = "Please check your internet connection";
-          _showDialog(InternetStatus, contentmessage, context);
-          break;
-      }
-    });
-    return await DataConnectionChecker().connectionStatus;
-  }
-}
-
-class LoginScreen extends StatefulWidget {
-  @override
-  _LoginScreenState createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-
-  @override
-  void initState() {
-  super.initState();
-  checkInternet().checkConnection(context);
-  }
-
-  @override
-  void dispose() {
-  checkInternet().listener.cancel();
-  super.dispose();
-  }
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text('Welcome', style: TextStyle(fontSize: 24.0),),
       ),
     );
   }
