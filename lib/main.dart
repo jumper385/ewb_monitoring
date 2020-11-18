@@ -17,10 +17,7 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         backgroundColor: Colors.amber[50],
         body: Column(
-          children: [
-            AsyncTest(),
-            GPSData(),
-          ],
+          children: [AsyncTest(), GPSData()],
         ),
       ),
     );
@@ -137,15 +134,20 @@ class GPSData extends StatefulWidget {
 }
 
 class GPSDataState extends State<GPSData> {
-  LocationData currPos;
-  // Position posStream;
   Location location = new Location();
+  var latlong;
+
+  Future<List> getGPS(gpsObject) async {
+    var newLocation = await gpsObject.getLocation();
+    return [newLocation.latitude, newLocation.longitude];
+  }
 
   void delayed() {
     Timer.periodic(delay, (timer) {
-      location.getLocation().then((pos) {
+      getGPS(location).then((value) {
+        print(value);
         setState(() {
-          currPos = pos;
+          latlong = value;
         });
       });
     });
@@ -166,11 +168,11 @@ class GPSDataState extends State<GPSData> {
             "GPS Data",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
           ),
-          Text(currPos != null
-              ? "latitude: " + currPos.latitude.toString()
+          Text(latlong != null
+              ? "latitude: " + latlong[0].toString()
               : 'nothing...'),
-          Text(currPos != null
-              ? "longitude: " + currPos.longitude.toString()
+          Text(latlong != null
+              ? "longitude: " + latlong[1].toString()
               : 'nothing...'),
         ],
       ),
