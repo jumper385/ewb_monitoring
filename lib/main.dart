@@ -6,7 +6,7 @@ import 'dart:async';
 import 'dart:math';
 import 'filenaming.dart' as fn;
 
-final delay = Duration(seconds: 3);
+final delay = Duration(milliseconds: 250);
 
 void main() => runApp(MyApp());
 
@@ -16,7 +16,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: Colors.amber[50],
+        backgroundColor: Colors.green[200],
+        appBar: AppBar(
+          backgroundColor: Colors.green[300],
+          title: Text('EWB APPtech'),
+        ),
         body: Column(
           children: [AsyncTest(), GPSData()],
         ),
@@ -39,7 +43,7 @@ class _AsyncTestState extends State<AsyncTest> {
     return pow((pow(x_val, 2) + pow(y_val, 2) + pow(z_val, 2)), 0.5);
   }
 
-  void getData() async {
+  void getData() {
     Timer.periodic(delay, (timer) {
       setState(() {
         _x = x;
@@ -69,8 +73,8 @@ class _AsyncTestState extends State<AsyncTest> {
         padding: const EdgeInsets.all(32),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 16),
+            Align(
+              alignment: Alignment.center,
               child: Text(
                 "Accelerometer Data ${testTitle}",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
