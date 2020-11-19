@@ -5,6 +5,7 @@ import 'package:location/location.dart';
 import 'dart:async';
 import 'dart:math';
 import 'filenaming.dart' as fn;
+import 'fileio.dart' as fs;
 
 final delay = Duration(milliseconds: 250);
 
