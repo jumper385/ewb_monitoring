@@ -4,7 +4,7 @@ import 'package:sensors/sensors.dart';
 import 'package:location/location.dart';
 import 'dart:async';
 import 'dart:math';
-import 'helpers.dart';
+import 'filenaming.dart' as fn;
 
 final accel_delay = Duration(seconds: 3);
 final gps_delay = Duration(seconds: 10);
@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
           title: Text('EWB APPtech'),
         ),
         body: Column(
-          children: [MainStructure()],
+          children: [AsyncTest(), GPSData()],
         ),
       ),
     );
@@ -45,17 +45,10 @@ class MainStructure extends StatefulWidget {
 class _MainStructureState extends State<MainStructure> {
   //State Variables
   double x, y, z = 0;
-  List<double> accelValues;
-  Location location = new Location();
-  var latlong;
-  String filename;
-
-  //Main Threads
-  Future<void> accelData() async {
-    setState(() {
-      accelValues = [x, y, z];
-    });
-    write_file(accelValues, 'accel', filename, compile);
+  double _x, _y, _z = 0;
+  String testTitle = fn.generateFilename(); // delete later - here for testing
+  double euclideanDistance(double x_val, double y_val, double z_val) {
+    return pow((pow(x_val, 2) + pow(y_val, 2) + pow(z_val, 2)), 0.5);
   }
 
   Future<void> gpsData() async {
@@ -132,7 +125,7 @@ class _MainStructureState extends State<MainStructure> {
             Align(
               alignment: Alignment.center,
               child: Text(
-                "Accel Data",
+                "Accelerometer Data ${testTitle}",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
               ),
             ),
