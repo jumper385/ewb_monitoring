@@ -63,7 +63,7 @@ class _MainStructureState extends State<MainStructure> {
 
   //Initialization
   @override
-  void initstate() {
+  void initState() {
     super.initState();
 
     filename = generate_filename();
@@ -76,10 +76,13 @@ class _MainStructureState extends State<MainStructure> {
       });
     });
 
-    new Timer.periodic(accel_delay, (Timer accelTimer) {
+    Timer.periodic(accel_delay, (Timer accelTimer) {
+      print("Hello world");
       accelData();
     });
-    new Timer.periodic(gps_delay, (Timer gpsTimer) {
+
+    Timer.periodic(gps_delay, (Timer gpsTimer) {
+      print("hello world 2");
       gpsData();
     });
   }
