@@ -6,7 +6,15 @@ import 'dart:async';
 import 'dart:math';
 import 'filenaming.dart' as fn;
 
-final delay = Duration(milliseconds: 250);
+final accel_delay = Duration(seconds: 3);
+final gps_delay = Duration(seconds: 10);
+final thread2_delay = Duration(seconds: 20);
+final thread3_delay = Duration(seconds: 5);
+final String vehicleID = 'this vehicle';
+final String upload = "root/upload";
+final String compile = "root/compile";
+final double distance_threshold = 10.0;
+final String databaseurl = "http://gayhenry";
 
 void main() => runApp(MyApp());
 
@@ -29,13 +37,13 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class AsyncTest extends StatefulWidget {
+class MainStructure extends StatefulWidget {
   @override
-  _AsyncTestState createState() => _AsyncTestState();
+  _MainStructureState createState() => _MainStructureState();
 }
 
-class _AsyncTestState extends State<AsyncTest> {
-  String message = "nothing...";
+class _MainStructureState extends State<MainStructure> {
+  //State Variables
   double x, y, z = 0;
   double _x, _y, _z = 0;
   String testTitle = fn.generateFilename(); // delete later - here for testing
@@ -43,19 +51,40 @@ class _AsyncTestState extends State<AsyncTest> {
     return pow((pow(x_val, 2) + pow(y_val, 2) + pow(z_val, 2)), 0.5);
   }
 
-  void getData() {
-    Timer.periodic(delay, (timer) {
+  Future<void> gpsData() async {
+    getGPS(location).then((value) {
       setState(() {
-        _x = x;
-        _y = y;
-        _z = z;
+        latlong = value;
       });
+      write_file(latlong, 'gps', filename, compile);
     });
   }
 
+  Future<void> thread2() async {
+    String last_filename = filename;
+    filename = generate_filename();
+    if (await movement_detection(last_filename, compile, distance_threshold)) {
+      move_file(last_filename, compile, upload);
+    } else {
+      delete_file(last_filename, upload);
+    }
+  }
+
+  Future<void> thread3() async {
+    if (!await check_folder_empty(upload)) {
+      if (await is_connected()) {
+        List file_list = await get_file_list(upload);
+        file_list.forEach((e) => {upload_delete(databaseurl, e, upload)});
+      }
+    }
+  }
+
+  //Initialization
   @override
   void initState() {
     super.initState();
+    filename = generate_filename();
+
     accelerometerEvents.listen((event) {
       setState(() {
         x = event.x;
@@ -63,9 +92,29 @@ class _AsyncTestState extends State<AsyncTest> {
         z = event.z;
       });
     });
-    getData();
+
+    Timer.periodic(accel_delay, (Timer accelTimer) {
+      print("Hello world");
+      accelData();
+    });
+
+    Timer.periodic(gps_delay, (Timer gpsTimer) {
+      print("hello world 2");
+      gpsData();
+    });
+
+    Timer.periodic(thread2_delay, (Timer thread2Timer) {
+      print("hello world 3");
+      thread2();
+    });
+
+    Timer.periodic(thread3_delay, (Timer thread3Timer) {
+      print("hello world 4");
+      thread3();
+    });
   }
 
+  //Display
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -88,7 +137,9 @@ class _AsyncTestState extends State<AsyncTest> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("X-Axis"),
-                      Text(_x != null ? _x.toStringAsFixed(3) : 'nothing...'),
+                      Text(accelValues != null
+                          ? accelValues[0].toStringAsFixed(3)
+                          : 'nothing...'),
                     ],
                   ),
                 ),
@@ -98,7 +149,9 @@ class _AsyncTestState extends State<AsyncTest> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("Y-Axis"),
-                      Text(_y != null ? _y.toStringAsFixed(3) : 'nothing...'),
+                      Text(accelValues != null
+                          ? accelValues[1].toStringAsFixed(3)
+                          : 'nothing...'),
                     ],
                   ),
                 ),
@@ -108,78 +161,26 @@ class _AsyncTestState extends State<AsyncTest> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("Z-Axis"),
-                      Text(_z != null ? _z.toStringAsFixed(3) : 'nothing...'),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Net Acceleration"),
-                      Text(_x != null
-                          ? euclideanDistance(_x, _y, _z).toStringAsFixed(3)
+                      Text(accelValues != null
+                          ? accelValues[2].toStringAsFixed(3)
                           : 'nothing...'),
                     ],
                   ),
                 ),
+                Text(
+                  "GPS Data",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
+                ),
+                Text(latlong != null
+                    ? "latitude: " + latlong[0].toString()
+                    : 'nothing...'),
+                Text(latlong != null
+                    ? "longitude: " + latlong[1].toString()
+                    : 'nothing...'),
               ],
             )
           ],
         ),
-      ),
-    );
-  }
-}
-
-class GPSData extends StatefulWidget {
-  @override
-  GPSDataState createState() => GPSDataState();
-}
-
-class GPSDataState extends State<GPSData> {
-  Location location = new Location();
-  var latlong;
-
-  Future<List> getGPS(gpsObject) async {
-    var newLocation = await gpsObject.getLocation();
-    return [newLocation.latitude, newLocation.longitude];
-  }
-
-  void delayed() {
-    Timer.periodic(delay, (timer) {
-      getGPS(location).then((value) {
-        print(value);
-        setState(() {
-          latlong = value;
-        });
-      });
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    delayed();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Text(
-            "GPS Data",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
-          ),
-          Text(latlong != null
-              ? "latitude: " + latlong[0].toString()
-              : 'nothing...'),
-          Text(latlong != null
-              ? "longitude: " + latlong[1].toString()
-              : 'nothing...'),
-        ],
       ),
     );
   }
