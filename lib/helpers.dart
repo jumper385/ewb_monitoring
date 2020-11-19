@@ -70,7 +70,7 @@ Future<bool> check_folder_empty(folder) async {
     },
   ).then((value) {
     print(value);
-    return true;
+    return false;
   });
 }
 
