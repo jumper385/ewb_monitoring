@@ -33,4 +33,20 @@ Future<void> move_file(filename, folder_from, folder_to) async {
       '${directory.path}/${folder_from}/${filename}'); //gone to file and aquired it
   await file.rename(
       '${directory.path}/${folder_to}/${filename}'); //moving file to where it needs to go
+  return;
+}
+
+Future<void> delete_file(filename, folder) async {
+  final Directory directory = await getApplicationDocumentsDirectory();
+
+  File file = File('${directory.path}/${folder}/${filename}');
+  await file.delete();
+  return;
+}
+
+Future<bool> check_folder_empty(folder) async {
+  final Directory directory = await getApplicationDocumentsDirectory();
+  Directory dir = Directory('${directory.path}/${folder}');
+  List files = dir.listSync();
+  return files.isEmpty;
 }
