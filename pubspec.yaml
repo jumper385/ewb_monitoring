@@ -26,6 +26,8 @@ dependencies:
   sensors: ^0.4.2+4
   http: ^0.12.2
   location: ^3.0.0
+  data_connection_checker: ^0.3.4
+  connectivity: ^0.4.2
   uuid: ^2.2.2
   path_provider: ^1.6.24
 
